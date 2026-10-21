@@ -1,6 +1,5 @@
 flask
 python-dotenv
 requests
-opentelemetry-distro 
-opentelemetry-exporter-jaeger 
+opentelemetry-distro
 opentelemetry-instrumentation-flask

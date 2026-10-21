@@ -1,5 +1,5 @@
 site_name: Using Red Hat build of OpenTelemetry - Python
-site_description: Using Red Hat build of OpenTelemetry - Python
+site_description: Using Red Hat build of OpenTelemetry with Python Flask
 
 nav:
   - Overview: index.md

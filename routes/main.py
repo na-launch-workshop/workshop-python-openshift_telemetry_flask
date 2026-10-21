@@ -1,28 +1,12 @@
 from datetime import datetime
 from flask import Blueprint, jsonify, request, abort, Response
 from opentelemetry import trace
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-from flask import Flask
 import base64
 
-# OpenTelemetry setup
-trace.set_tracer_provider(TracerProvider())
-tracer = trace.get_tracer(__name__)
-
-jaeger_exporter = JaegerExporter(
-    agent_host_name="tempo-sample-query-frontend-observability.apps.<ocp-cluster>",
-    agent_port=6831,
-)
-
-span_processor = BatchSpanProcessor(jaeger_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
-
-# Flask app + instrumentation
-app = Flask(__name__)
-FlaskInstrumentor().instrument_app(app)
+# Tracing is configured by the OpenTelemetry Operator, not here. The
+# instrumentation.opentelemetry.io/inject-python annotation on the deployment
+# auto-instruments Flask and exports OTLP/HTTP to the collector sidecar, so all
+# this module needs to do is decorate the span the operator already created.
 
 main = Blueprint('main', __name__)
 
@@ -58,10 +42,3 @@ def check_json():
         abort(500, description="Sending ERROR 500")
 
     return jsonify({"message": "SUCCESS VALID", "data": data}), 200
-
-
-# Register blueprint and start app if needed
-app.register_blueprint(main)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)

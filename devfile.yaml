@@ -1,44 +1,57 @@
-schemaVersion: 2.2.2
+schemaVersion: 2.3.0
 metadata:
   name: workshop-opentelemetry-python
   version: 1.0.0
-  description: DevSpaces workspace for Python app
+  description: Using Red Hat build of OpenTelemetry - Python
 attributes:
   che-editor: vscode
 components:
-- container:
-    args:
-    - tail
-    - -f
-    - /dev/null
-    endpoints:
-    - name: https-python
-      protocol: https
-      targetPort: 5000
-    - exposure: none
-      name: debug
-      targetPort: 5858
-    env:
-    - name: DEBUG_PORT
-      value: "5858"
-    image: image-registry.openshift-image-registry.svc.cluster.local:5000/openshift/devspaces-dotnet-python:latest
-    mountSources: true
-  name: py
+  - name: tools
+    container:
+      image: image-registry.openshift-image-registry.svc:5000/workspace-images/udi-rhel9:latest
+      env:
+        - name: DEBUG_PORT
+          value: "5858"
+        - name: PATH
+          value: /home/user/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      endpoints:
+        - name: https-python
+          exposure: public
+          protocol: https
+          targetPort: 5000
+        - name: debug
+          exposure: none
+          targetPort: 5858
+      volumeMounts:
+        - name: pip-cache
+          path: /home/user/.cache/pip
+      cpuLimit: '2'
+      cpuRequest: '500m'
+      memoryLimit: '3Gi'
+      memoryRequest: '1Gi'
+      mountSources: true
+
+  - name: pip-cache
+    volume:
+      size: 1G
 
 commands:
-- exec:
-    commandLine: pip install -r requirements.txt
-    component: py
-    group:
-      isDefault: true
-      kind: build
-    workingDir: ${PROJECT_SOURCE}
-  id: pip-install-requirements
-- exec:
-    commandLine: flask run --host=0.0.0.0 --port=5000
-    component: py
-    group:
-      isDefault: true
-      kind: run
-    workingDir: ${PROJECT_SOURCE}
-  id: run-python
+  - id: pip-install-requirements
+    exec:
+      label: "1. Install dependencies"
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: "pip install --user -r requirements.txt"
+      group:
+        kind: build
+        isDefault: true
+
+  - id: run-python
+    exec:
+      label: "2. Run the application"
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: "flask run --host=0.0.0.0 --port=5000"
+      group:
+        kind: run
+        isDefault: true
