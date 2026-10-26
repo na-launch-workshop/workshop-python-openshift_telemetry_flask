@@ -8,14 +8,14 @@ for i in {1..20}; do
     echo "$(date): Sending valid request"
     # Valid request: includes the required "musthave" key in JSON.
     curl -s -X POST -H "Content-Type: application/json" \
-         -d '{ "customerName" : "ACME", "dateOfTransaction" : "04/17/2025", "amount": 30000 }' \
+         -d '{ "customerName" : "ACME", "dateOfTransaction" : "10/29/2026", "amount": 30000 }' \
          http://$1/api/check -v
     echo ""  # Optional: adds a newline for clarity.
   else
     echo "$(date): Sending invalid request"
     # Invalid request: missing the "musthave" key.
     curl -s -X POST -H "Content-Type: application/json" \
-         -d '{ "customerName" : "ACME", "dateOfTransaction" : "04/17/2025", "amount": 20000 }' \
+         -d '{ "customerName" : "ACME", "dateOfTransaction" : "10/29/2026", "amount": 20000 }' \
          http://$1/api/check -v
     echo ""
   fi

@@ -13,10 +13,9 @@ spec:
           - name: opentelemetry-python-curl-random
             env:
               - name: ENDPOINT
-                ### REPLACE THIS VALUE WITH YOUR UNIQUE SERVICE NAME i.e. ocp-workshop-<your username> ###
+                ### REPLACE THIS VALUE WITH YOUR UNIQUE SERVICE NAME i.e. workshop-<your username> ###
                 value: <REPLACEME>:5000
-            ### REPLACE THIS VALUE WITH YOUR CLUSTER DOMAIN NAME ###
-            image: default-route-openshift-image-registry.apps.<REPLACEME>/openshift/module-opentelemetry-python-curl:latest
+            image: image-registry.openshift-image-registry.svc:5000/workspace-images/opentelemetry-curl:latest
             # Optional: if your script requires no parameters,
             # you can rely on the CMD set in the image.
             # Otherwise, you can override with:

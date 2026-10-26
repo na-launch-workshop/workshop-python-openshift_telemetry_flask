@@ -2,7 +2,7 @@
 
 **Technology Stack:**
 
-- Python
+- Python (Flask)
 - OpenTelemetry
 
 ---

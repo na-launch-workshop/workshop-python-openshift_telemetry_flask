@@ -4,7 +4,7 @@ metadata:
   name: workshop-opentelemetry-python
   title: Using Red Hat build of OpenTelemetry - Python
   description: |
-    Using Red Hat build of OpenTelemetry
+    Using Red Hat build of OpenTelemetry with Python Flask
   annotations:
     backstage.io/techdocs-ref: dir:.
 #   backstage.io/techdocs-ref: dir:https://<hosted-git-repo>   # use absolute path instead to consolidate techdocs among repo forks
@@ -20,5 +20,5 @@ metadata:
 spec:
   type: module
   lifecycle: development
-  owner: group:default/workshop-admins
+  owner: group:default/users
   subcomponentOf: component:default/workshop-repository

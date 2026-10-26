@@ -14,7 +14,7 @@ spec:
       batch: {}
     exporters:
       otlp:
-        endpoint: "tempo-sample-distributor.observability.svc.cluster.local:4317"
+        endpoint: "tempo-tempo-distributor.tempo.svc.cluster.local:4317"
         tls:
           insecure: true
     service:
